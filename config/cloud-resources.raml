@@ -1,0 +1,113 @@
+#%RAML 0.8
+title: Steroids Data
+mediaType: application/json
+baseUri: https://rest-api.appgyver.com/v1/
+
+traits:
+    - securedBySteroidsApiKey:
+        headers:
+          steroidsApiKey:
+            type: string
+            example: exampleapikey
+            default: f9124e2d55074c1dc3b11dd4fd35b1571c3f54c170cb13ebb256cf5c1da67a74
+          steroidsAppId:
+            type: integer
+            example: 1234
+            default: 80588
+  
+schemas:
+  - Todolist_collection: '{"$schema":"http://json-schema.org/schema","title":"Todolist collection","type":"object","properties":{"objects":{"type":"array","items":{"$schema":"http://json-schema.org/schema","type":"object","description":"The canonical Todolist representation","properties":{"text":{"type":"string"},"done":{"type":"boolean"},"owner":{"type":"string"}},"required":[]}}}}'
+  - Todolist_member: '{"$schema":"http://json-schema.org/schema","type":"object","description":"The canonical Todolist representation","properties":{"object":{"type":"object","properties":{"text":{"type":"string"},"done":{"type":"boolean"},"owner":{"type":"string"}},"required":[]}}}'
+
+resourceTypes:
+  - dolan_db_collection:
+      usage: This resourceType should be used for any collection of items
+      is: [ securedBySteroidsApiKey ]
+      get:
+        description: |
+          {
+            "action": "collection"
+          }
+        responses:
+          200:
+            description: |
+              {
+                "rootKey": "objects"
+              }
+            body:
+              application/json:
+                schema: <<resourcePathName>>_collection # e.g cars
+      post:
+        description: |
+          {
+            "action": "create",
+            "rootKey": "object"
+          }
+        body:
+          application/json:
+            schema: <<resourcePathName>>_member
+        responses:
+          200:
+            description: |
+              {
+                "rootKey": "object"
+              }
+            body:
+              application/json:
+                schema: <<resourcePathName>>_member # e.g. car
+
+  - dolan_db_member:
+      usage: This resourceType should be used for any built.io item
+      is: [ securedBySteroidsApiKey ]
+      get:
+        description: |
+          {
+            "action": "find"
+          }
+        responses:
+          200:
+            description: |
+              {
+                "rootKey": "object"
+              }
+            body:
+              application/json:
+                schema: <<resourcePathName>>_member # e.g. car
+      put:
+        description: |
+          {
+            "action": "update",
+            "rootKey": "object"
+          }
+        body:
+          application/json:
+            schema: <<resourcePathName>>_member
+        responses:
+          200:
+            description: |
+              {
+                "rootKey": "object"
+              }
+            body:
+              application/json:
+                schema: <<resourcePathName>>_member
+      delete:
+        description: |
+          {
+            "action": "destroy"
+          }
+        responses:
+          200:
+
+
+/Todolist:
+  description: |
+    {
+      "resourceName": "Todolist",
+      "identifierKey": "id"
+    }
+  type: dolan_db_collection
+  /{id}:
+    type: dolan_db_member
+
+

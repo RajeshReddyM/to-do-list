@@ -1,0 +1,32 @@
+<div ng-controller="ShowController">
+  <super-navbar>
+    <super-navbar-title>
+      Show
+    </super-navbar-title>
+  </super-navbar>
+
+  <div class="padding">
+    <div ng-show="showSpinner" ng-include="'_spinner.html'"></div>
+    <div ng-hide="showSpinner">
+      <h2 ng-bind="todolist['text']"></h2>
+      
+      
+      
+       <p>done: <span ng-bind="todolist['done']"></span></p> 
+      
+       <p>owner: <span ng-bind="todolist['owner']"></span></p> 
+      
+
+
+      <super-modal-show location="todolist#edit?id={{ todolist.id }}">
+        <button class="button button-block button-positive">
+          Edit
+        </button>
+      </super-modal-show>
+
+      <button ng-click="remove(todolist.id)" class="button button-block button-negative">
+        Remove
+      </button>
+    </div>
+  </div>
+</div>
