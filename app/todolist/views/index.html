@@ -14,14 +14,12 @@
   <div ng-show="showSpinner" ng-include="'_spinner.html'"></div>
   <div ng-hide="showSpinner">
     <ul class="list" ng-hide="todolists.length == 0">
-
-      <super-navigate location="todolist#show" data-params-id="{{ task.id }}" ng-repeat="task in todolists">
-        <li class="item item-icon-right">
+      <li class="item item-icon-right" ng-repeat="task in todolists">
+        <super-navigate location="todolist#show" data-params-id="{{ task.id }}">
           <span ng-bind="task['text']"></span>
-          <i class="icon super-minus-circled"></i>
-        </li>
-      </super-navigate>
-
+        </super-navigate>
+        <button ng-click="remove(task.id)" class="button icon super-minus-circled"></button>
+      </li>
     </ul>
 
     <h4 ng-show="todolists.length == 0" class="assertive padding">
