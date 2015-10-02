@@ -6,15 +6,15 @@
   </super-navbar>
 
   <div class="list list-inset">
-    <label class="item item-input search-text">
+    <label class="item item-input search-text" >
       <input type="text" ng-model="searchtext" placeholder="Search by Task Name">
     </label>
-    <button class="button icon super-search" ng-click="search(searchtext)"></button>
+    <button class="button icon super-search"></button>
   </div>
   <div ng-show="showSpinner" ng-include="'_spinner.html'"></div>
   <div ng-hide="showSpinner">
     <ul class="list" ng-hide="todolists.length == 0">
-      <li class="item item-icon-right" ng-repeat="task in todolists">
+      <li class="item item-icon-right" ng-repeat="task in todolists | filter:searchtext">
         <super-navigate location="todolist#show" data-params-id="{{ task.id }}">
           <span ng-bind="task['text']"></span>
         </super-navigate>
